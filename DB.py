@@ -3,10 +3,10 @@ from mysql.connector import RefreshOption
 import yaml
 from yaml import CLoader as Loader
 import time
-with open('/var/www/fssp_bot/configs/config.yaml', 'r') as f:
-    config = yaml.load(f, Loader=Loader)['DB']
-# with open('/Users/denysmalykhin/PycharmProjects/fssp_bot/configs/config.yaml', 'r') as f:
+# with open('/var/www/fssp_bot/configs/config.yaml', 'r') as f:
 #     config = yaml.load(f, Loader=Loader)['DB']
+with open('/Users/denysmalykhin/PycharmProjects/fssp_bot/configs/config.yaml', 'r') as f:
+    config = yaml.load(f, Loader=Loader)['DB']
 
 class DataBase():
     def __init__(self):
@@ -70,7 +70,6 @@ class DataBase():
         username = proxy['username']
         password = proxy['password']
         self.cursor.execute('DELETE FROM proxy_in_work WHERE ip = %s AND port = %s', (ip, port))
-        self.cnx.commit()
         self.cursor.execute('INSERT INTO banned_proxy(ip, port, username, password) VALUES (%s, %s, %s, %s)',
                             (ip, port, username, password))
         self.cnx.commit()

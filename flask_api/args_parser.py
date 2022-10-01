@@ -33,8 +33,6 @@ def parse_args():
     if params['variant'] == 2:
         if not params['drtrName']:
             return {'status': 'error', 'message': 'Не указан drtrName'}
-        if not params['address']:
-            return {'status': 'error', 'message': 'Не указан address'}
 
     if params['variant'] == 3:
         if not params['ipNumber']:
