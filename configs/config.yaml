@@ -1,0 +1,15 @@
+#DB:
+#  user: admin
+#  password: )-I521j6eVrl5NHB
+#  host: localhost
+#  port: 8889
+#  db: lilu6285_fssp
+#  raise_on_warnings: True
+
+
+DB:
+  user: user897
+  password: xH2rC0gZ4i
+  host: localhost
+  port: 3306
+  db: lilu6285_fssp
