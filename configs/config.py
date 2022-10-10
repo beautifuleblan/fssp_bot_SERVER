@@ -9,7 +9,7 @@ PASS_PARAMS_IN_URL: Передача параметров в ссылке - True
 
 """
 
-API_KEY = ''
+API_KEY = 'KCE7WWhfPq9DzqLydXSkvs40llJz4o0g'
 QUERY_IN_WORK_DELAY = 30
 QUERY_IN_WORK_REPEAT_AMOUNT = 2
 BETWEEN_ACTIONS_DELAY = 2

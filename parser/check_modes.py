@@ -1,10 +1,10 @@
-from parser.manual_check import individual_entity_check, legal_entity_check, ip_number_check
-from playwright.sync_api import Page
+from .manual_check import individual_entity_check, legal_entity_check, ip_number_check
+from playwright.async_api import Page
 from urllib.parse import urlencode
-from configs.config import *
+from configs import *
 
 
-def define_check_mode(page: Page, kwargs):
+async def define_check_mode(page: Page, kwargs):
     if PASS_PARAMS_IN_URL:
         params = {
         "is[ip_preg]": "",
@@ -23,15 +23,15 @@ def define_check_mode(page: Page, kwargs):
         "is[region_id][0]": str(kwargs['regionId']) if kwargs.get('regionId') else "-1"
         }
         url = 'https://fssp.gov.ru/iss/ip/?' + urlencode(params)
-        page.goto(url, wait_until='commit')
+        await page.goto(url, wait_until='commit')
 
     else:
-        page.goto('https://fssp.gov.ru/iss/ip/', wait_until='commit')
+        await page.goto('https://fssp.gov.ru/iss/ip/', wait_until='commit')
         if kwargs['variant'] == 1:
-            individual_entity_check(page, **kwargs)
+            await individual_entity_check(page, **kwargs)
         if kwargs['variant'] == 2:
-            legal_entity_check(page, **kwargs)
+            await legal_entity_check(page, **kwargs)
         if kwargs['variant'] == 3:
-            ip_number_check(page, **kwargs)
+            await ip_number_check(page, **kwargs)
 
 

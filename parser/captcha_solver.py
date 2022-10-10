@@ -1,6 +1,7 @@
-from playwright.sync_api import Page
-from requests_toolbelt.multipart.encoder import MultipartEncoder
+from playwright.async_api import Page
 import requests
+from requests_toolbelt import MultipartEncoder
+from loguru import logger
 
 decode_dict = {"b": "б", "v": "в", "g": "г", "d": "д", "j": "ж", "k": "к", "l": "л",
                 "m": "м", "n": "н", "p": "п", "r": "р", "s": "с", "t": "т"}
@@ -18,19 +19,18 @@ def solve_captcha(base_64_img: str):
             captcha_code.append(char)
     return "".join(captcha_code)
 
-def submit_captcha(page: Page):
+async def submit_captcha(page: Page):
     try:
-        page.set_default_navigation_timeout(5000)
-        captcha_base64 = page.locator('xpath=//*[@id="capchaVisual"]').get_attribute('src')
+        captcha_base64 = await page.locator('xpath=//*[@id="capchaVisual"]').get_attribute('src')
         captcha_code = solve_captcha(captcha_base64)
-        print(captcha_code)
-        page.locator('xpath=//*[@id="captcha-popup-code"]').fill(captcha_code)
-        page.click('xpath=//*[@id="ncapcha-submit"]')
-        captcha_popup = page.is_visible('//*[@id="captcha-popup"]')
+        await page.locator('xpath=//*[@id="captcha-popup-code"]').fill(captcha_code)
+        await page.click('xpath=//*[@id="ncapcha-submit"]')
+        captcha_popup = await page.is_visible('//*[@id="captcha-popup"]')
         if captcha_popup:
-            submit_captcha(page)
+            await submit_captcha(page)
         return True
-    except:
+    except Exception as ex:
+        logger.exception(ex)
         return False
 
 

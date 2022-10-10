@@ -1,30 +1,29 @@
-from playwright.sync_api import Page
+from playwright.async_api import Page
 from parser.captcha_solver import submit_captcha
 from bs4 import BeautifulSoup
-from time import sleep
+import asyncio
 import json
 
-def grab_data(page: Page):
-    pagination_is_present = page.is_visible('div[class="pagination"]')
+async def grab_data(page: Page):
+    pagination_is_present = await page.is_visible('div[class="pagination"]')
     contents = []
     if pagination_is_present:
-        contents.append(page.content())
-        while page.is_visible('text=Следующая'):
-            page.click('text=Следующая')
-            sleep(2)
-            submit_captcha(page)
-            contents.append(page.content())
-        data = parse_data(contents)
-        print(len(data))
+        contents.append(await page.content())
+        while await page.is_visible('text=Следующая'):
+            await page.click('text=Следующая')
+            await asyncio.sleep(2)
+            await submit_captcha(page)
+            contents.append(await page.content())
+        data = await parse_data(contents)
         return data
     else:
-        content = page.content()
+        content = await page.content()
         contents.append(content)
-        data = parse_data(contents)
+        data = await parse_data(contents)
         return data
 
 
-def parse_data(contents):
+async def parse_data(contents):
     array = []
     for content in contents:
         soup = BeautifulSoup(content, 'html.parser')
